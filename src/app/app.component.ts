@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform, Events} from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -12,33 +12,40 @@ import { ListPage } from '../pages/list/list';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = HomePage;
+  root = HomePage;
+  loggedIn= false;
 
-  pages: Array<{title: string, component: any}>;
+  loggedInPages = [
+    { title: 'Logout', component: ListPage }
+  ];
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
-    this.initializeApp();
+  loggedOutPages = [
+    { title: 'Login', component: HomePage}
+  ];
+  
+  constructor(public platform: Platform, 
+    public statusBar: StatusBar, 
+    public splashScreen: SplashScreen,
+    private events:Events) {
 
-    // used for an example of ngFor and navigation
-    this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'List', component: ListPage }
-    ];
-
+    this.listenToLoginEvents();
   }
 
-  initializeApp() {
-    this.platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
-    });
-  }
-
-  openPage(page) {
-    // Reset the content nav to have just this page
+  openPage(_: any, page: any) {
+    // find the nav component and set what the root page should be
+    // reset the nav to remove previous pages and only have this page
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
+  }
+
+
+  listenToLoginEvents() {
+    this.events.subscribe('user:login', () => {
+      this.loggedIn = true;
+    });
+
+    this.events.subscribe('user:logout', () => {
+      this.loggedIn = false;
+    });
   }
 }

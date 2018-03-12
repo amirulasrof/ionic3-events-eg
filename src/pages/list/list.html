@@ -8,16 +8,11 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
-      <ion-icon [name]="item.icon" item-start></ion-icon>
-      {{item.title}}
-      <div class="item-note" item-end>
-        {{item.note}}
-      </div>
-    </button>
-  </ion-list>
-  <div *ngIf="selectedItem" padding>
-    You navigated here from <b>{{selectedItem.title}}</b>
+  <h3 margin-left>Logout</h3>
+  <p margin>Click the logout button to logout. Then, toggle the menu to see the menu items change.</p>
+
+  <div padding>
+    <button ion-button block (click)="logout()">Logout</button>
+    <button ion-button block color="secondary" menuToggle>Toggle Menu</button>
   </div>
 </ion-content>
